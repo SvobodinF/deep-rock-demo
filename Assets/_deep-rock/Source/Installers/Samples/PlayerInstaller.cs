@@ -13,7 +13,8 @@ public class PlayerInstaller : Installer<PlayerConfiguration>
         Player player = Instantiate(_player);
         IController controller = Instantiate(playerConfiguration.InputController);
 
-        PlayerData playerData = new PlayerData(controller, playerConfiguration.MovementConfiguration);
+        PlayerData playerData = new PlayerData(controller, playerConfiguration.MovementConfiguration,
+            playerConfiguration.ShootingWeaponConfiguration);
 
         player.Init(playerData);
         _mainCamera.Init(player);

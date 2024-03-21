@@ -9,6 +9,7 @@ public class Player : Actor<PlayerData>, ICameraTarget
     public bool IsAlive => true;
 
     [ShowNonSerializedField] private Movement _movement;
+    [SerializeField] private ShootingWeapon _shootingWeapon;
 
     protected override void OnInit(PlayerData data)
     {
@@ -16,6 +17,10 @@ public class Player : Actor<PlayerData>, ICameraTarget
 
         _movement.Init(data.Controller, data.MovementConfiguration);
         AnimationHandler.Init();
+
+        ShootingWeaponConfiguration configuration = data.ShootingWeaponConfiguration;
+        ObjectPool<Bullet> objectPool = new ObjectPool<Bullet>(configuration.BulletPrefab, null, 100);
+        _shootingWeapon.Init(objectPool, configuration.Damage, configuration.ActionDelay);
     }
 
     private void OnValidate()
@@ -25,52 +30,38 @@ public class Player : Actor<PlayerData>, ICameraTarget
 
     protected override void Rotate()
     {
-        if (_movement.Direction.x == 0 && _movement.Direction.y == 0)
-        {
-            return;
-        }
-        else
-        {
-            transform.eulerAngles = _movement.GetRotationByVelocity();
-        }
-
-        
-
-        /*if (_shooting.Target == null)
+        if (_shootingWeapon.TargetAvailableToHit == false)
         {
             /*if (isDie == true)
             {
                 transform.localScale = new Vector3(_localScaleValue, _localScaleValue, _localScaleValue);
                 return;
-            }
+            }*/
+            RotateShootingWeapon(transform.eulerAngles);
 
-            if (_movement2D.Direction.x == 0)
+            if (_movement.Direction.x == 0 && _movement.Direction.y == 0)
             {
+                
                 return;
             }
             else
             {
-                transform.eulerAngles = _movement2D.Rotation;
+                transform.eulerAngles = _movement.GetRotationByVelocity();
             }
 
             return;
-        }*/
-
-        //bool isRight = _shooting.Target.position.x >= transform.position.x;
-        //float angle = isRight ? 0f : 180f;
-        //print(angle);
-
-        //transform.eulerAngles = _movement.GetRotationByVelocity();
-
-        /*if (_movement2D.Direction.x == 0)
-        {
-            _animationController.Set(AnimationController.StateName.IsBack, AnimationController.Option.BOOL, false);
-            return;
         }
 
-        bool backShooting = isRight ? _movement2D.Direction.x < 0 ? true : false : _movement2D.Direction.x < 0 ? false : true;
+        bool isTargetLocatedRight = _shootingWeapon.TargetPosition.x >= transform.position.x;
+        float angle = isTargetLocatedRight ? 0f : 180f;
+        transform.eulerAngles = new Vector3(0f, angle, 0f);
+        RotateShootingWeapon(new Vector3(0f, 0f, _shootingWeapon.Angle), isTargetLocatedRight);
+    }
 
-        _animationController.Set(AnimationController.StateName.IsBack, AnimationController.Option.BOOL, backShooting);*/
+    private void RotateShootingWeapon(Vector3 angle, bool isTargetLocatedRight = true)
+    {
+        _shootingWeapon.transform.localScale = isTargetLocatedRight ? Vector3.one : new Vector3(1f, -1f, 1f);
+        _shootingWeapon.transform.eulerAngles = angle;
     }
 
     protected override void OnAnimate()
@@ -83,10 +74,13 @@ public struct PlayerData
 {
     public readonly IController Controller;
     public readonly MovementConfiguration MovementConfiguration;
+    public readonly ShootingWeaponConfiguration ShootingWeaponConfiguration;
 
-    public PlayerData(IController controller, MovementConfiguration movementConfiguration)
+    public PlayerData(IController controller, MovementConfiguration movementConfiguration,
+        ShootingWeaponConfiguration shootingWeaponConfiguration)
     {
         Controller = controller;
         MovementConfiguration = movementConfiguration;
+        ShootingWeaponConfiguration = shootingWeaponConfiguration;
     }
 }

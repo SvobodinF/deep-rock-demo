@@ -17,7 +17,7 @@ public class Movement2D : Movement
 
     protected override void Move(Vector3 direction)
     {
-        _rigidbody2D.velocity = new Vector2(GetDirection(direction.x), GetDirection(direction.y));
+        _rigidbody2D.velocity = new Vector2(GetDirection(direction.x), GetDirection(direction.z));
     }
 
     protected override void OnValidate()

@@ -7,8 +7,16 @@ public class MachineGun : ShootingWeapon
         base.Init(objectPool, damage, delay);
     }
 
-    protected override void OnAttack(int damage)
+    protected override void OnAttack()
     {
-        Debug.Log($"Attack {nameof(MachineGun)}");
+        if (HasTarget == false)
+            return;
+
+        bool canHit = CanHit(Target);
+
+        if (canHit == false)
+            return;
+
+        Shoot();
     }
 }

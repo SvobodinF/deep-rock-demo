@@ -202,6 +202,7 @@ GameObject:
   m_Component:
   - component: {fileID: 132453715320746105}
   - component: {fileID: 132453715320746106}
+  - component: {fileID: 6696742638143154770}
   m_Layer: 0
   m_Name: Hand Left
   m_TagString: Untagged
@@ -220,7 +221,8 @@ Transform:
   m_LocalPosition: {x: 0.3, y: -0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7307258334379622648}
   m_Father: {fileID: 132453714957651646}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -276,6 +278,60 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6696742638143154770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132453715320746104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1417b9b466354cbf871d7c88b2fa01d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LayerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  IsDraw: 1
+  DrawColor: {r: 0, g: 1, b: 0.07144809, a: 1}
+  _radius: 7
+  Center: {fileID: 132453715320746105}
+  _muzzle: {fileID: 7307258334379622648}
+  _blockableMask:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!1 &693593249750236155
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7307258334379622648}
+  m_Layer: 0
+  m_Name: Muzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7307258334379622648
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693593249750236155}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.754, y: 0.121, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 132453715320746105}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5139708863872807481
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,7 +345,7 @@ GameObject:
   - component: {fileID: 1672183930700686469}
   - component: {fileID: 6789409517075553093}
   - component: {fileID: 2429566009761491530}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -325,6 +381,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Model: {fileID: 132453714957651646}
+  _shootingWeapon: {fileID: 6696742638143154770}
 --- !u!50 &1672183930700686469
 Rigidbody2D:
   serializedVersion: 4

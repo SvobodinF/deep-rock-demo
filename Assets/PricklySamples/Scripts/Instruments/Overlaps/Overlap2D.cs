@@ -39,14 +39,14 @@ public abstract class Overlap2D
         Transform target = null;
         float distance = float.MaxValue;
 
-        for (int i = 0; i < transforms.Count; i++)
+        foreach (Transform transform in transforms)
         {
-            float targetDistance = Vector3.Distance(transforms[i].position, Transform.position);
+            float targetDistance = Vector3.Distance(transform.position, Transform.position);
 
             if (targetDistance < distance)
             {
                 distance = targetDistance;
-                target = transforms[i];
+                target = transform;
             }
         }
 

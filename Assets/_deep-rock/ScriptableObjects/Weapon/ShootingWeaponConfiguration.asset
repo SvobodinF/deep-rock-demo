@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e7a0e903b98742db92585820b8f0d15, type: 3}
-  m_Name: PlayerMovementConfiguration
+  m_Script: {fileID: 11500000, guid: c32ccc543650742729746c66d3983544, type: 3}
+  m_Name: ShootingWeaponConfiguration
   m_EditorClassIdentifier: 
-  _maxSpeed: 200
+  _bulletPrefab: {fileID: 6371278094162703560, guid: 342165b603cbf4940a3614995099a32a, type: 3}
+  _damage: 10
+  _actionDelay: 0.5

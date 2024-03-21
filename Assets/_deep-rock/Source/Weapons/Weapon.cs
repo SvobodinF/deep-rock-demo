@@ -9,15 +9,18 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField] protected bool IsDraw;
     [SerializeField] protected Color DrawColor = Color.white;
 
-    protected virtual bool CanAttack { get => false; }
+    public bool HasTarget => Target != null;
+    public Vector3 TargetPosition => Target.position;
 
-    private int _damage;
+    protected abstract Transform Target { get; }
+
+    protected int Damage { get; private set; }
     private float _delay;
     private Coroutine _attackRoutine;
 
     public void Init(int damage, float delay)
     {
-        _damage = damage;
+        Damage = damage;
         _delay = delay;
 
         if (_attackRoutine != null)
@@ -26,7 +29,7 @@ public abstract class Weapon : MonoBehaviour
         _attackRoutine = StartCoroutine(WaitAttackAction());
     }
 
-    protected abstract void OnAttack(int damage);
+    protected abstract void OnAttack();
 
     protected virtual void OnGizmosDebug()
     {
@@ -41,10 +44,9 @@ public abstract class Weapon : MonoBehaviour
     {
         while (true)
         {
-            if (CanAttack == false)
-                continue;
+            yield return new WaitUntil(() => HasTarget);
 
-            OnAttack(_damage);
+            OnAttack();
 
             yield return new WaitForSeconds(_delay);
         }
