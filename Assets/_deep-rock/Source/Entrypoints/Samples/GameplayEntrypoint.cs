@@ -10,6 +10,8 @@ public class GameplayEntrypoint : Entrypoint
 
     public override void Start()
     {
+        Application.targetFrameRate = _gameConfiguration.TargetFPS;
+
         _playerInstaller.Install(_gameConfiguration.PlayerConfiguration);
     }
 }

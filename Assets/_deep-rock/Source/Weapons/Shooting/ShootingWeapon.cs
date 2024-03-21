@@ -43,7 +43,6 @@ public abstract class ShootingWeapon : Weapon
 
     protected void Shoot()
     {
-        Debug.Log("Shoot");
         Bullet bullet = _objectPool.Get();
         BulletInitialData bulletInitialData = new BulletInitialData(_muzzle.position, Angle, Damage);
         bullet.Init(bulletInitialData, (bullet) => _objectPool.Release(bullet));
