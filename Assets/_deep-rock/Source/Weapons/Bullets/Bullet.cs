@@ -17,6 +17,7 @@ public abstract class Bullet : MonoBehaviour
     public virtual void Init(BulletInitialData bulletInitialData, Action<Bullet> onDisable)
     {
         Damage = bulletInitialData.Damage;
+        OnDisableEvent = onDisable;
         transform.SetPositionAndRotation(bulletInitialData.Position,
             Quaternion.Euler(0f, 0f, bulletInitialData.Angle));
 
