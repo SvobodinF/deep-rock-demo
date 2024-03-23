@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -60,6 +61,24 @@ public class TileConnector : MonoBehaviour
         {new int[]{ 0, 1, 1, 1, 0, 1, 1, 1 } },
         {new int[]{ 1, 0, 1, 0, 1, 0, 1, 1 } },
         {new int[]{ 0, 1, 0, 1, 0, 1, 1, 1 } },
+        {new int[]{ 1, 0, 1, 0, 0, 0, 0, 0 } },
+        {new int[]{ 0, 0, 1, 1, 1, 0, 0, 1 } },
+        {new int[]{ 1, 0, 0, 1, 0, 0, 0, 0 } },
+        {new int[]{ 1, 1, 0, 0, 1, 0, 1, 0 } },
+        {new int[]{ 1, 1, 0, 0, 0, 1, 0, 1 } },
+        {new int[]{ 0, 1, 1, 0, 0, 0, 0, 0 } },
+        {new int[]{ 0, 0, 1, 1, 0, 1, 1, 0 } },
+        {new int[]{ 0, 1, 0, 1, 0, 0, 0, 0 } },
+        {new int[]{ 0, 1, 1, 1, 1, 1, 1, 1 } },
+        {new int[]{ 1, 1, 0, 1, 1, 1, 1, 1 } },
+        {new int[]{ 1, 1, 1, 0, 1, 1, 1, 1 } },
+        {new int[]{ 1, 0, 1, 1, 1, 1, 1, 1 } },
+        {new int[]{ 0, 1, 1, 0, 1, 0, 1, 1 } },
+        {new int[]{ 1, 0, 0, 1, 0, 0, 1, 1 } },
+        {new int[]{ 1, 0, 0, 0, 0, 0, 0, 1 } },
+        {new int[]{ 0, 0, 1, 0, 0, 0, 1, 0 } },
+        {new int[]{ 0, 1, 0, 1, 1, 0, 0, 0 } },
+        {new int[]{ 1, 0, 1, 0, 1, 1, 1, 0 } },
     };
 
     [NaughtyAttributes.Button]
@@ -68,7 +87,20 @@ public class TileConnector : MonoBehaviour
         _tilemap.ClearAllTiles();
     }
 
-    public void Update()
+    private void OnEnable()
+    {
+        SceneView.duringSceneGui += EditTileset;
+        Debug.Log("Follow");
+    }
+
+    private void OnDisable()
+    {
+        SceneView.duringSceneGui -= EditTileset;
+        Debug.Log("Unfollow");
+    }
+
+    [NaughtyAttributes.Button]
+    public void UpdateAllTilesPattern()
     {
         if (Application.isPlaying) return;
 
@@ -82,20 +114,74 @@ public class TileConnector : MonoBehaviour
                 TileBase tile = tileBases[x + y * boundsInt.size.x];
                 if (tile != null)
                 {
-                    int index = HasNeighbours(new Vector2Int(x, y));
-                    if (index != -1)
-                    {
-                        _tilemap.SetTile(new Vector3Int(x, y, 0), _tiles[index]);
-                    }
-                    else
-                    {
-                        _tilemap.SetTile(new Vector3Int(x, y, 0), _blrokenTile);
-                    }
-
-                    _tilemap.ResizeBounds();
+                    CalculateTileConnection(new Vector2Int(x, y));
                 }                
             }
         }
+    }
+
+    private void EditTileset(SceneView sceneView)
+    {
+        if (Application.isPlaying) return;
+
+        Vector3Int? cellPosition = GetMousePosition();
+
+        if (cellPosition == null)
+            return;
+
+        CalculateTileConnection(new Vector2Int(cellPosition.Value.x, cellPosition.Value.y));
+        CalculateNeighboursConnection(new Vector2Int(cellPosition.Value.x, cellPosition.Value.y));
+    }
+
+    public Vector3Int? GetMousePosition()
+    {
+        Event e = Event.current;
+        if (e != null)
+        {
+            if (Event.current.type == EventType.MouseDown)
+            {
+                Vector3Int position = Vector3Int.FloorToInt(HandleUtility.GUIPointToWorldRay(Event.current.mousePosition).origin);
+                Vector3Int cellPos = _tilemap.WorldToCell(position);
+
+                return cellPos;
+            }
+        }
+
+        return null;
+    }
+
+    public void CalculateNeighboursConnection(Vector2Int origin)
+    {
+        foreach (Vector2Int direction in _validationDirections)
+        {
+            Debug.Log($"Origin {origin}");
+            Debug.Log($"validate direction {direction}");
+            Vector2Int coordinates = new Vector2Int(origin.x + direction.x, origin.y + direction.y);
+
+            TileBase tile = _tilemap.GetTile(new Vector3Int(coordinates.x, coordinates.y, 0));
+            Debug.Log($"Tile on {coordinates} is {tile == null}");
+
+            if (tile == null)
+                continue;
+
+            CalculateTileConnection(coordinates);
+        }
+    }
+
+    public void CalculateTileConnection(Vector2Int pos)
+    {
+        int index = HasNeighbours(new Vector2Int(pos.x, pos.y));
+        Debug.Log(index);
+        if (index != -1)
+        {
+            _tilemap.SetTile(new Vector3Int(pos.x, pos.y, 0), _tiles[index]);
+        }
+        else
+        {
+            _tilemap.SetTile(new Vector3Int(pos.x, pos.y, 0), _blrokenTile);
+        }
+
+        _tilemap.ResizeBounds();
     }
 
     [NaughtyAttributes.Button]
@@ -118,7 +204,7 @@ public class TileConnector : MonoBehaviour
         }
     }
 
-    private TileBase[] GetTiles(BoundsInt boundsInt)
+    public TileBase[] GetTiles(BoundsInt boundsInt)
     {
         return _tilemap.GetTilesBlock(boundsInt);
     }
@@ -127,9 +213,19 @@ public class TileConnector : MonoBehaviour
     {
         int[] pattern = GetConnectionPattern(origin);
 
-        if (debugPattern)
-            Debug.Log($"Connection pattern { string.Join(", ", pattern)}");
+        int result = ValidatePattern(pattern);
 
+        if (debugPattern)
+        {
+            if (result == -1)
+                Debug.Log($"Connection pattern { string.Join(", ", pattern)}");
+        }
+
+        return result;
+    }
+
+    private int ValidatePattern(int[] pattern)
+    {
         for (int i = 0; i < _connectionPatterns.Count; i++)
         {
             int counter = 0;

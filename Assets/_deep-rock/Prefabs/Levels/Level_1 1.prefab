@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 2507699424533913085}
   - component: {fileID: 2507699424533913086}
   m_Layer: 6
-  m_Name: Level_1
+  m_Name: Level_1 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10718,18 +10718,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b245c1904311945428c7bb689555d0cf, type: 2}
   - {fileID: 11400000, guid: 8cdaa60a88beb41b995e3e2698c99f33, type: 2}
   - {fileID: 11400000, guid: 64f9f194496cd486eb71726a66084819, type: 2}
-  - {fileID: 11400000, guid: 8cdaa60a88beb41b995e3e2698c99f33, type: 2}
-  - {fileID: 11400000, guid: d5ec0d3cd9efc492cb83ec147e19d741, type: 2}
-  - {fileID: 11400000, guid: dc8b44db79d2b4578aa53eee79780941, type: 2}
-  - {fileID: 11400000, guid: 0bd0a1a6b34d648abaa0972484c51d4f, type: 2}
-  - {fileID: 11400000, guid: ba1533290c70c4c21953906cbbe7701c, type: 2}
-  - {fileID: 11400000, guid: 7bbca8344d5b84fe79554ac77eda4d64, type: 2}
-  - {fileID: 11400000, guid: b245c1904311945428c7bb689555d0cf, type: 2}
-  - {fileID: 11400000, guid: 64f9f194496cd486eb71726a66084819, type: 2}
-  - {fileID: 11400000, guid: 72adc8a82a6d040b8b3ef6f96928e129, type: 2}
-  - {fileID: 11400000, guid: 1fc10185dbc7d4fa580dc7d81f595190, type: 2}
-  - {fileID: 11400000, guid: 7ac63a29f651c49058b9ab9a9e2939c6, type: 2}
-  - {fileID: 11400000, guid: 70bdf53a79e414bf9a9d4eaab3e3b87e, type: 2}
   _blrokenTile: {fileID: 11400000, guid: 763b78e04c90c492fae4e4d65d86114c, type: 2}
   _indexes: []
 --- !u!1 &3202660142884868823
