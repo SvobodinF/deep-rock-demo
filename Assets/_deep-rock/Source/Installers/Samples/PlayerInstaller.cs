@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
 
 public class PlayerInstaller : Installer<PlayerConfiguration>
 {
+    public event Action<IAliveble> OnPlayerInstalledEvent;
+
     [Header("References")]
     [SerializeField] private MainCamera _mainCamera;
     [SerializeField] private Transform _spawnPoint;
@@ -12,13 +15,14 @@ public class PlayerInstaller : Installer<PlayerConfiguration>
     public override void Install(PlayerConfiguration playerConfiguration)
     {
         Player player = Instantiate(_player);
-        player.transform.position = _spawnPoint.position;
         IController controller = Instantiate(playerConfiguration.InputController);
+        ObjectPool<Bullet> bulletPool = new ObjectPool<Bullet>(playerConfiguration.ShootingWeaponConfiguration.BulletPrefab, null, 100);
+        PlayerData playerData = new PlayerData(playerConfiguration, controller, bulletPool);
 
-        PlayerData playerData = new PlayerData(controller, playerConfiguration.MovementConfiguration,
-            playerConfiguration.ShootingWeaponConfiguration);
+        OnPlayerInstalledEvent?.Invoke(player);
 
-        player.Init(playerData);
+        player.transform.position = _spawnPoint.position;
+        player.Init(playerData, playerConfiguration);
         _mainCamera.Init(player);
     }
 }

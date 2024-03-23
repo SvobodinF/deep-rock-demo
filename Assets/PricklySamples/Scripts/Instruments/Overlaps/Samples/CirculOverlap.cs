@@ -11,9 +11,9 @@ public class CirculOverlap : Overlap2D
         _radius = radius;
     }
 
-    public override Transform GetNearestTarget()
+    public override T GetNearestTarget<T>()
     {
-        return GetNearestTarget(GetTargets<Transform>());
+        return GetNearestTarget(GetTargets<T>());
     }
 
     public override T GetTarget<T>()

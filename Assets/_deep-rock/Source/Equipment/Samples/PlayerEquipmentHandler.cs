@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerEquipmentHandler : MonoBehaviour
 {
-    public void Init(Weapon leftArmWeapon)
+    public void Init(Weapon<IDamageable> leftArmWeapon)
     {
 
     }

@@ -1,5 +1,5 @@
 using UnityEngine;
 
-public abstract class Configuration : ScriptableObject
+public abstract class Configuration : ScriptableObject, IConfiguration
 {
 }

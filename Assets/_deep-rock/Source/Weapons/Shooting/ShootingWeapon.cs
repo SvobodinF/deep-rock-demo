@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class ShootingWeapon : Weapon 
+public abstract class ShootingWeapon : Weapon<IDamageable> 
 {
     public bool TargetAvailableToHit => CanHit(Target);
 
@@ -13,7 +13,7 @@ public abstract class ShootingWeapon : Weapon
 
     public float Angle => Utils.Utils2D.GetAngleBetween(Center, Target.transform);
 
-    protected override Transform Target => FindNearestTarget();
+    protected override IDamageable Target => FindNearestTarget();
 
     private Overlap2D _overlap2D;
 
@@ -25,17 +25,20 @@ public abstract class ShootingWeapon : Weapon
         base.Init(damage, delay);
     }
 
-    protected Transform FindNearestTarget()
+    protected IDamageable FindNearestTarget()
     {
-        return _overlap2D.GetNearestTarget();
+        if (_overlap2D == null)
+            return null;
+
+        return _overlap2D.GetNearestTarget<IDamageable>();
     }
 
-    protected bool CanHit(Transform target)
+    protected bool CanHit(ITransformable target)
     {
         if (target == null)
             return false;
 
-        Vector2 direction = target.position - Center.position;
+        Vector2 direction = target.transform.position - Center.position;
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, _radius, _blockableMask);
 
         return hit.collider == null;

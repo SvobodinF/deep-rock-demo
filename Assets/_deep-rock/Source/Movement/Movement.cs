@@ -3,10 +3,11 @@ using UnityEngine;
 
 public abstract class Movement : MonoBehaviour
 {
-    public bool CanMove => Controller != null && Controller.IsEnabled == true && _canMove;
+    public bool CanMove => Controller != null && Controller.IsEnabled == true && _canMove && _aliveble.IsAlive;
 
     [SerializeField] protected bool _canMove = true;
     public IController Controller { get; protected set; }
+    private IAliveble _aliveble;
 
     [Header("Stats")]
     [ShowNonSerializedField] protected float MaxSpeed;
@@ -24,24 +25,22 @@ public abstract class Movement : MonoBehaviour
     protected abstract void Move(Vector3 direction);
     protected abstract void OnValidate();
 
-    public virtual void Stop()
-    {
-        _canMove = false;
-    }
-
-    public virtual void Play()
-    {
-        _canMove = true;
-    }
-
-    public void Init(IController controller, MovementConfiguration configuration)
+    public void Init(IController controller, IAliveble aliveble, MovementConfiguration configuration)
     {
         OnValidate();
 
         SetController(controller);
+        _aliveble = aliveble;
+
+        _aliveble.OnDiedEvent += OnDie;
 
         MaxSpeed = configuration.MaxSpeed;
         Speed = MaxSpeed;
+    }
+
+    private void OnDestroy()
+    {
+        _aliveble.OnDiedEvent -= OnDie;
     }
 
     protected void SetController(IController controller)
@@ -54,10 +53,15 @@ public abstract class Movement : MonoBehaviour
     {
         if (CanMove == false)
         {
-            Stop();
             return;
         }
 
         Move(Direction); 
+    }
+
+    private void OnDie()
+    {
+        _canMove = false;
+        Controller.IsEnabled = false;
     }
 }

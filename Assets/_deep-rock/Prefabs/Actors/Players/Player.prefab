@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 132453714472700220}
   - component: {fileID: 132453714472700221}
+  - component: {fileID: 1750379416838178381}
   m_Layer: 0
   m_Name: Hand Right
   m_TagString: Untagged
@@ -84,6 +85,24 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1750379416838178381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132453714472700219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e12d695ac4ec4d2e8862d611ae1a83c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  IsDraw: 1
+  DrawColor: {r: 0, g: 1, b: 0.13080311, a: 1}
+  Center: {fileID: 132453714957651646}
 --- !u!1 &132453714957651644
 GameObject:
   m_ObjectHideFlags: 0
@@ -383,6 +402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Model: {fileID: 132453714957651646}
   _shootingWeapon: {fileID: 6696742638143154770}
+  _digWeapon: {fileID: 1750379416838178381}
 --- !u!50 &1672183930700686469
 Rigidbody2D:
   serializedVersion: 4

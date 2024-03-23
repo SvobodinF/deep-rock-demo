@@ -8,6 +8,7 @@ public class PlayerAnimationHandler : AnimationHandler
         Animation = new Dictionary<Type, IAnimationParameter>()
         {
             { typeof(SpeedAnimationParameter), new SpeedAnimationParameter() },
+            { typeof(DieAnimationParameter), new DieAnimationParameter() },
         };
     }
 }

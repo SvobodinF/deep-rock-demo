@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccd9a55aa7ffd47569dc9355848a18cd, type: 3}
   m_Name: GameConfiguration
   m_EditorClassIdentifier: 
+  _targetFPS: 0
   _playerConfiguration: {fileID: 11400000, guid: ee6d71cb3f67d4349aad97f1231c8a54, type: 2}

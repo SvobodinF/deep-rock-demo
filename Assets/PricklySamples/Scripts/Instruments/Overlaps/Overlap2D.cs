@@ -16,7 +16,7 @@ public abstract class Overlap2D
     public abstract Action DrawOverlap(Color color);
     public abstract List<T> GetTargets<T>();
     public abstract T GetTarget<T>();
-    public abstract Transform GetNearestTarget();
+    public abstract T GetNearestTarget<T>() where T : class, ITransformable;
     public abstract Collider2D[] GetColliders();
 
     protected T GetTarget<T>(Collider2D[] colliders)
@@ -34,23 +34,23 @@ public abstract class Overlap2D
         return default;
     }
 
-    protected Transform GetNearestTarget(List<Transform> transforms)
+    protected T GetNearestTarget<T>(List<T> targets) where T : class, ITransformable
     {
-        Transform target = null;
+        T result = null;
         float distance = float.MaxValue;
 
-        foreach (Transform transform in transforms)
+        foreach (T target in targets)
         {
-            float targetDistance = Vector3.Distance(transform.position, Transform.position);
+            float targetDistance = Vector3.Distance(target.transform.position, Transform.position);
 
             if (targetDistance < distance)
             {
                 distance = targetDistance;
-                target = transform;
+                result = target;
             }
         }
 
-        return target;
+        return result;
     }
 
     protected List<T> GetTargets<T>(Collider2D[] colliders)

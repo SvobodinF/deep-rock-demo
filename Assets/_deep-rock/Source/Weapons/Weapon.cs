@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public abstract class Weapon : MonoBehaviour
+public abstract class Weapon<T> : MonoBehaviour where T : ITransformable
 {
     [SerializeField] protected LayerMask LayerMask;
 
@@ -10,15 +10,15 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField] protected Color DrawColor = Color.white;
 
     public bool HasTarget => Target != null;
-    public Vector3 TargetPosition => Target.position;
+    public Vector3 TargetPosition => Target.transform.position;
 
-    protected abstract Transform Target { get; }
+    [NaughtyAttributes.ShowNativeProperty] protected abstract T Target { get; }
 
     protected int Damage { get; private set; }
     private float _delay;
     private Coroutine _attackRoutine;
 
-    public void Init(int damage, float delay)
+    public virtual void Init(int damage, float delay)
     {
         Damage = damage;
         _delay = delay;

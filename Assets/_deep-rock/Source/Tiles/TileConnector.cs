@@ -154,12 +154,9 @@ public class TileConnector : MonoBehaviour
     {
         foreach (Vector2Int direction in _validationDirections)
         {
-            Debug.Log($"Origin {origin}");
-            Debug.Log($"validate direction {direction}");
             Vector2Int coordinates = new Vector2Int(origin.x + direction.x, origin.y + direction.y);
 
             TileBase tile = _tilemap.GetTile(new Vector3Int(coordinates.x, coordinates.y, 0));
-            Debug.Log($"Tile on {coordinates} is {tile == null}");
 
             if (tile == null)
                 continue;
