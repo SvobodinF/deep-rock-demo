@@ -17,14 +17,15 @@ public class EnvironmentInstaller : Installer<EnvironmentData>
 
         OnEnvironmentInstalledEvent?.Invoke(level);
 
-        RescanNavigationGrid();
+        _astarPath.Scan();
 
-        level.OnLevelChangedEvent += RescanNavigationGrid;
+        level.OnLevelChangedEvent += UpdateNavigationGrid;
     }
 
-    private void RescanNavigationGrid()
+    private void UpdateNavigationGrid(Vector3 center)
     {
-        _astarPath.Scan();
+        Bounds bounds = new Bounds(center, Vector3.one * 5);
+        _astarPath.UpdateGraphs(bounds, 0);
     }
 }
 

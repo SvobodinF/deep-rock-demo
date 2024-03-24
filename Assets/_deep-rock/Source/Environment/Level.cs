@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Level : MonoBehaviour
 {
-    public event Action OnLevelChangedEvent;
+    public event Action<Vector3> OnLevelChangedEvent;
 
     public Vector3 SpawnPosition => _spawnPoint.position;
 
@@ -26,7 +26,7 @@ public class Level : MonoBehaviour
             handler.Init(transformable, spawner);
         }
 
-        _tileHandler.OnTileRemovedEvent += (coordinates) => OnLevelChangedEvent?.Invoke();
+        _tileHandler.OnTileRemovedEvent += (coordinates, worldPos) => OnLevelChangedEvent?.Invoke(worldPos);
         SetupOre(oreLevelConfigurations);
 
         _tileHandler.Init();

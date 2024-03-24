@@ -79,7 +79,7 @@ public class OreInstaller : Installer<OreInitialData>
         return result;
     }
 
-    private void RemoveOre(Vector3Int coordinates)
+    private void RemoveOre(Vector3Int coordinates, Vector3 worldPosition)
     {
         if (_cellsOres.TryGetValue(coordinates, out Ore ore))
         {

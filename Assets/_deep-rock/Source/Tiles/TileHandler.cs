@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class TileHandler : MonoBehaviour, IDiggable
 {
     public event Action<Vector3, Vector3Int> OnTileAddedEvent;
-    public event Action<Vector3Int> OnTileRemovedEvent;
+    public event Action<Vector3Int, Vector3> OnTileRemovedEvent;
 
     [SerializeField] private Tilemap _tilemap;
     [SerializeField] private TileConnector _tileConnector;
@@ -55,7 +55,7 @@ public class TileHandler : MonoBehaviour, IDiggable
             {
                 _tilemap.SetTile(cellIndexes, null);
                 _tileConnector.CalculateNeighboursConnection(new Vector2Int(cellIndexes.x, cellIndexes.y));
-                OnTileRemovedEvent?.Invoke(cellIndexes);
+                OnTileRemovedEvent?.Invoke(cellIndexes, _tilemap.CellToWorld(cellIndexes) + _tilemap.cellSize / 2);
 
                 return;
             }

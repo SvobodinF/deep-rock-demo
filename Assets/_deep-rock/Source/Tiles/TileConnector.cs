@@ -123,7 +123,7 @@ public class TileConnector : MonoBehaviour
         }
     }
 
-    public Vector3Int? GetMousePosition()
+    /*public Vector3Int? GetMousePosition()
     {
         Event e = Event.current;
         if (e != null)
@@ -138,7 +138,7 @@ public class TileConnector : MonoBehaviour
         }
 
         return null;
-    }
+    }*/
 
     public void CalculateNeighboursConnection(Vector2Int origin)
     {
