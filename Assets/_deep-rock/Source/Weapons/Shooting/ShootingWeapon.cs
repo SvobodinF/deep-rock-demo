@@ -36,10 +36,7 @@ public abstract class ShootingWeapon : Weapon<IDamageable>
     protected bool CanHit(ITransformable target)
     {
         if (target == null)
-        {
-            Debug.Log("Target is null");
             return false;
-        }
 
         Vector2 direction = target.transform.position - Center.position;
         float distance = Vector2.Distance(target.transform.position, Center.position);

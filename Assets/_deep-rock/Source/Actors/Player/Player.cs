@@ -3,11 +3,14 @@ using UnityEngine;
 
 [RequireComponent(typeof(Movement2D))]
 [RequireComponent(typeof(PlayerAnimationHandler))]
-public class Player : Actor<PlayerData>, ICameraTarget
+public class Player : Actor<PlayerData>, ICameraTarget, IPlayer
 {
     [ShowNonSerializedField] private Movement _movement;
     [SerializeField] private ShootingWeapon _shootingWeapon;
     [SerializeField] private DigWeapon _digWeapon;
+    [SerializeField] private OreCollector _oreCollector;
+
+    public Collector<Ore> Collector => _oreCollector;
 
     protected override void OnInit(PlayerData data)
     {
@@ -19,6 +22,7 @@ public class Player : Actor<PlayerData>, ICameraTarget
         _movement.Init(data.Controller, this, configuration.MovementConfiguration);
         _shootingWeapon.Init(data.BulletPool, weaponConfiguration.Damage, weaponConfiguration.ActionDelay);
         _digWeapon.Init(data.Controller, configuration.MeleeWeaponConfiguration);
+        _oreCollector.Init(this);
     }
 
     private void OnEnable()

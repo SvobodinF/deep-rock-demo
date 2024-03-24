@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class GameplayEntrypoint : Entrypoint
 {
+    [Header("FSM")]
+    [SerializeField] private GameStateHandler _gameStateHandler;
+
     [Header("Installers")]
     [SerializeField] private EnvironmentInstaller _environmentInstaller;
     [SerializeField] private PlayerInstaller _playerInstaller;
@@ -12,6 +15,7 @@ public class GameplayEntrypoint : Entrypoint
     [SerializeField] private GameConfiguration _gameConfiguration;
 
     private Level _level;
+    private OreHandler _oreHandler;
 
     public override void Start()
     {
@@ -25,8 +29,10 @@ public class GameplayEntrypoint : Entrypoint
         LevelConfiguration levelConfiguration = environmentData.EnvironmentConfiguration.GetLevelConfigurationbyIndex(levelIndex);
 
         _environmentInstaller.OnEnvironmentInstalledEvent += SetupPlayer;
+        _playerInstaller.OnPlayerInstalledEvent += SetupDomain;
         _playerInstaller.OnPlayerInstalledEvent += SetupViewport;
-        _playerInstaller.OnPlayerInstalledEvent += (aliveble) => SetupEnemies(levelConfiguration, aliveble, _level);
+        _playerInstaller.OnPlayerInstalledEvent += (aliveble) => SetupEnvironment(levelConfiguration, aliveble, _level);
+        _playerInstaller.OnPlayerInstalledEvent += SetupFSM;
 
         _environmentInstaller.Install(environmentData);
     }
@@ -39,15 +45,25 @@ public class GameplayEntrypoint : Entrypoint
         _playerInstaller.Install(playerInstallData);
     }
 
-    private void SetupViewport(IAliveble aliveble)
+    private void SetupDomain(IPlayer player)
     {
-        ViewportConfiguration configuration = new ViewportConfiguration(aliveble);
+        _oreHandler = new OreHandler(player.Collector);
+    }
+
+    private void SetupViewport(IPlayer player)
+    {
+        ViewportConfiguration configuration = new ViewportConfiguration(player, _oreHandler);
         _viewportInstaller.Install(configuration);
     }
 
-    private void SetupEnemies(LevelConfiguration configuration, IAliveble aliveble, Level level)
+    private void SetupEnvironment(LevelConfiguration configuration, IAliveble aliveble, Level level)
     {
-        EnemiesData enemiesData = new EnemiesData(configuration.EnemyConfigurations, aliveble, level);
+        EnemiesData enemiesData = new EnemiesData(configuration.OreConfigurations, configuration.EnemyConfigurations, aliveble, level);
         _enemyInstaller.Install(enemiesData);
+    }
+
+    private void SetupFSM(IPlayer player)
+    {
+        _gameStateHandler.Init(player);
     }
 }

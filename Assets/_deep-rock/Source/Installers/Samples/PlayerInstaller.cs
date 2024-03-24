@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerInstaller : Installer<PlayerInstallData>
 {
-    public event Action<IAliveble> OnPlayerInstalledEvent;
+    public event Action<IPlayer> OnPlayerInstalledEvent;
 
     [Header("References")]
     [SerializeField] private MainCamera _mainCamera;

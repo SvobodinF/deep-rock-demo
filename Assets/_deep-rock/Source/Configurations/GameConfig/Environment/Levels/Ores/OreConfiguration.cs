@@ -1,18 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class OreConfiguration : MonoBehaviour
+[CreateAssetMenu(fileName = nameof(OreConfiguration), menuName = "Configurations/Level/OreConfiguration", order = 51)]
+public class OreConfiguration : Configuration
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Ore OrePrefab => _orePrefab;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] private Ore _orePrefab;
 }

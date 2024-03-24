@@ -15,18 +15,29 @@ public class Level : MonoBehaviour
     [SerializeField] private TileHandler _tileHandler;
     [SerializeField] private Transform _spawnPoint;
 
+    [SerializeField] private OreInstaller _oreInstaller;
+ 
     private float _frequency => Utils.Utils.EvaluteFloat(_minFrequency, _maxFrequency, _difficult);
 
-    public void Init(ITransformable transformable, EnemySpawner spawner)
+    public void Init(ITransformable transformable, EnemySpawner spawner, OreLevelConfiguration[] oreLevelConfigurations)
     {
         foreach (EnemyHandler handler in _enemyHandlers)
         {
             handler.Init(transformable, spawner);
         }
 
-        _tileHandler.OnTileRemovedEvent += () => OnLevelChangedEvent?.Invoke();
+        _tileHandler.OnTileRemovedEvent += (coordinates) => OnLevelChangedEvent?.Invoke();
+        SetupOre(oreLevelConfigurations);
+
+        _tileHandler.Init();
+        _oreInstaller.Generate();
 
         StartCoroutine(WaitEnemySpawn());
+    }
+
+    private void SetupOre(OreLevelConfiguration[] oreLevelConfigurations)
+    {
+        _oreInstaller.Install(new OreInitialData(_tileHandler, oreLevelConfigurations));
     }
 
     private IEnumerator WaitEnemySpawn()

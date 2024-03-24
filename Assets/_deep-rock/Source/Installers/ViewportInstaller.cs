@@ -6,6 +6,6 @@ public class ViewportInstaller : Installer<ViewportConfiguration>
 
     public override void Install(ViewportConfiguration configuration)
     {
-        _inGameWindow.Init(configuration.Player);   
+        _inGameWindow.Init(configuration.Player, configuration.OreHandler);   
     }
 }

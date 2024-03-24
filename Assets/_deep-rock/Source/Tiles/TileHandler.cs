@@ -5,7 +5,8 @@ using UnityEngine.Tilemaps;
 
 public class TileHandler : MonoBehaviour, IDiggable
 {
-    public event Action OnTileRemovedEvent;
+    public event Action<Vector3, Vector3Int> OnTileAddedEvent;
+    public event Action<Vector3Int> OnTileRemovedEvent;
 
     [SerializeField] private Tilemap _tilemap;
     [SerializeField] private TileConnector _tileConnector;
@@ -15,12 +16,12 @@ public class TileHandler : MonoBehaviour, IDiggable
 
     private Vector3Int _cellDebug;
 
-    public void Start()
+    public void Init()
     {
         _cellsHealth = new Dictionary<Vector3Int, int>();
 
         BoundsInt boundsInt = _tilemap.cellBounds;
-        TileBase[] tileBases = _tileConnector.GetTiles(boundsInt);
+        TileBase[] tileBases = GetAllTiles();
 
         for (int x = 0; x < boundsInt.size.x; x++)
         {
@@ -29,10 +30,18 @@ public class TileHandler : MonoBehaviour, IDiggable
                 TileBase tile = tileBases[x + y * boundsInt.size.x];
                 if (tile != null)
                 {
-                    _cellsHealth.Add(new Vector3Int(x, y, boundsInt.z), _maxHealth);
+                    Vector3Int pos = new Vector3Int(x, y, boundsInt.z);
+                    _cellsHealth.Add(pos, _maxHealth);
+                    OnTileAddedEvent?.Invoke(_tilemap.CellToWorld(pos) + _tilemap.cellSize / 2, pos);
                 }
             }
         }
+    }
+
+    private TileBase[] GetAllTiles()
+    {
+        BoundsInt boundsInt = _tilemap.cellBounds;
+        return _tileConnector.GetTiles(boundsInt);
     }
 
     public void Dig(Vector3 position, int damage)
@@ -46,7 +55,7 @@ public class TileHandler : MonoBehaviour, IDiggable
             {
                 _tilemap.SetTile(cellIndexes, null);
                 _tileConnector.CalculateNeighboursConnection(new Vector2Int(cellIndexes.x, cellIndexes.y));
-                OnTileRemovedEvent?.Invoke();
+                OnTileRemovedEvent?.Invoke(cellIndexes);
 
                 return;
             }

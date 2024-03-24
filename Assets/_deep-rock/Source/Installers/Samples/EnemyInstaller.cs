@@ -5,20 +5,22 @@ public class EnemyInstaller : Installer<EnemiesData>, ITransformable
         EnemySpawner enemySpawner = new EnemySpawner(configuration.EnemyConfigurations, this);
 
         Level level = configuration.Level;
-        level.Init(configuration.Target, enemySpawner);
+        level.Init(configuration.Target, enemySpawner, configuration.OreLevelConfiguration);
     }
 }
 
 public struct EnemiesData : IConfiguration
 {
+    public readonly OreLevelConfiguration[] OreLevelConfiguration;
     public readonly EnemyConfiguration[] EnemyConfigurations;
     public readonly ITransformable Target;
     public readonly Level Level;
 
-    public EnemiesData(EnemyConfiguration[] enemyConfigurations, ITransformable player, Level level)
+    public EnemiesData(OreLevelConfiguration[] oreLevelConfiguration, EnemyConfiguration[] enemyConfigurations, ITransformable target, Level level)
     {
+        OreLevelConfiguration = oreLevelConfiguration;
         EnemyConfigurations = enemyConfigurations;
-        Target = player;
+        Target = target;
         Level = level;
     }
 }

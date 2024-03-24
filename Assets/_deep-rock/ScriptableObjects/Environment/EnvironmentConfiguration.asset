@@ -18,3 +18,8 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 27c62bac0db3d4ff3be6c8a574252c71, type: 2}
     - {fileID: 11400000, guid: 8bf9d8c594fcb4decb1886559d520cf4, type: 2}
     - {fileID: 11400000, guid: a3a9091343f834e55a709e6426d187cb, type: 2}
+    _oreConfigurations:
+    - Count: 50
+      _oreConfiguration: {fileID: 11400000, guid: e7458c309b5b04f269ac03d977e7027e, type: 2}
+    - Count: 10
+      _oreConfiguration: {fileID: 11400000, guid: 97e0b3d9c99d84f53a5ccf93ed7cd09e, type: 2}

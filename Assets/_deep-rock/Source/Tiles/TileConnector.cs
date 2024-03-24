@@ -123,19 +123,6 @@ public class TileConnector : MonoBehaviour
         }
     }
 
-    private void EditTileset(SceneView sceneView)
-    {
-        if (Application.isPlaying) return;
-
-        Vector3Int? cellPosition = GetMousePosition();
-
-        if (cellPosition == null)
-            return;
-
-        CalculateTileConnection(new Vector2Int(cellPosition.Value.x, cellPosition.Value.y));
-        CalculateNeighboursConnection(new Vector2Int(cellPosition.Value.x, cellPosition.Value.y));
-    }
-
     public Vector3Int? GetMousePosition()
     {
         Event e = Event.current;
