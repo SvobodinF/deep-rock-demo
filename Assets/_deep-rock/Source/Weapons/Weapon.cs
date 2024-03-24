@@ -31,13 +31,8 @@ public abstract class Weapon<T> : MonoBehaviour where T : ITransformable
 
     protected abstract void OnAttack();
 
-    protected virtual void OnGizmosDebug()
+    protected virtual void OnDrawGizmos()
     {
-    }
-
-    private void OnDrawGizmos()
-    {
-        OnGizmosDebug();
     }
 
     private IEnumerator WaitAttackAction()

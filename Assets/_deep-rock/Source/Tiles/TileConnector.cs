@@ -89,20 +89,23 @@ public class TileConnector : MonoBehaviour
 
     private void OnEnable()
     {
-        SceneView.duringSceneGui += EditTileset;
-        Debug.Log("Follow");
+        //SceneView.duringSceneGui += EditTileset;
+        //Debug.Log("Follow");
     }
 
     private void OnDisable()
     {
-        SceneView.duringSceneGui -= EditTileset;
-        Debug.Log("Unfollow");
+        //SceneView.duringSceneGui -= EditTileset;
+        //Debug.Log("Unfollow");
     }
 
     [NaughtyAttributes.Button]
     public void UpdateAllTilesPattern()
     {
         if (Application.isPlaying) return;
+
+        _tilemap.ResizeBounds();
+        _tilemap.CompressBounds();
 
         BoundsInt boundsInt = _tilemap.cellBounds;
         TileBase[] tileBases = GetTiles(boundsInt);
@@ -168,7 +171,6 @@ public class TileConnector : MonoBehaviour
     public void CalculateTileConnection(Vector2Int pos)
     {
         int index = HasNeighbours(new Vector2Int(pos.x, pos.y));
-        Debug.Log(index);
         if (index != -1)
         {
             _tilemap.SetTile(new Vector3Int(pos.x, pos.y, 0), _tiles[index]);
@@ -204,6 +206,11 @@ public class TileConnector : MonoBehaviour
     public TileBase[] GetTiles(BoundsInt boundsInt)
     {
         return _tilemap.GetTilesBlock(boundsInt);
+    }
+
+    public TileBase GetTile(Vector3Int position)
+    {
+        return _tilemap.GetTile(position);
     }
 
     private int HasNeighbours(Vector2Int origin, bool debugPattern = false)

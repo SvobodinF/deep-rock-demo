@@ -29,7 +29,9 @@ public abstract class Actor<T> : MonoBehaviour, IAliveble where T : struct
 
     protected abstract void OnInit(T configuration);
     protected abstract void Rotate();
-    protected abstract void OnAnimate();
+    protected virtual void OnAnimate()
+    {
+    }
 
     private void Update()
     {
@@ -40,6 +42,7 @@ public abstract class Actor<T> : MonoBehaviour, IAliveble where T : struct
     private void OnValidate()
     {
         AnimationHandler = GetComponent<AnimationHandler>();
+        AnimationHandler.Init();
     }
 
     public void OnDamage(int damage)

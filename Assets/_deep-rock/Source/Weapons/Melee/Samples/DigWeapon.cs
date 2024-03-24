@@ -24,8 +24,7 @@ public class DigWeapon : MeleeWeapon<IDiggable>
         if (worldPoint == null)
             return;
 
-        Vector3Int point3Int = new Vector3Int((int)worldPoint.Value.x, (int)worldPoint.Value.y, (int)worldPoint.Value.z);
-        Target.Dig(point3Int, Damage);
+        Target.Dig(worldPoint.Value, Damage);
     }
 
     private IDiggable GetTarget()
@@ -49,7 +48,7 @@ public class DigWeapon : MeleeWeapon<IDiggable>
 
         if (hit.transform.TryGetComponent(out IDiggable diggable))
         {
-            return hit.point;
+            return Center.transform.position + new Vector3(direction.x, direction.y, 0f);
         }
 
         return null;
@@ -57,14 +56,7 @@ public class DigWeapon : MeleeWeapon<IDiggable>
 
     private RaycastHit2D GetRaycastHit(Vector2 direction)
     {
+        Debug.DrawRay(Center.position, Direction * Radius, Color.green);
         return Physics2D.Raycast(Center.position, direction, Radius, LayerMask);
-    }
-
-    protected override void OnGizmosDebug()
-    {
-        if (_controller == null)
-            return;
-
-        Gizmos.DrawRay(Center.position, _controller.Direction);
     }
 }

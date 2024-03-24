@@ -36,10 +36,17 @@ public abstract class ShootingWeapon : Weapon<IDamageable>
     protected bool CanHit(ITransformable target)
     {
         if (target == null)
+        {
+            Debug.Log("Target is null");
             return false;
+        }
 
         Vector2 direction = target.transform.position - Center.position;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, _radius, _blockableMask);
+        float distance = Vector2.Distance(target.transform.position, Center.position);
+        RaycastHit2D hit = Physics2D.Raycast(Center.position, direction, distance, _blockableMask);
+        Debug.DrawRay(Center.position, direction, Color.red, 0.1f);
+
+        Debug.Log($"HitCollider is {(hit.collider == null ? "null" : hit.collider.name)}");
 
         return hit.collider == null;
     }
@@ -51,7 +58,7 @@ public abstract class ShootingWeapon : Weapon<IDamageable>
         bullet.Init(bulletInitialData, (bullet) => _objectPool.Release(bullet));
     }
 
-    protected override void OnGizmosDebug()
+    protected override void OnDrawGizmos()
     {
         if (_overlap2D == null)
         {

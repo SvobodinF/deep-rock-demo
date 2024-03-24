@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: MeleeWeaponConfiguration
   m_EditorClassIdentifier: 
   _damage: 1
-  _actionDelay: 0.5
-  _distance: 1.5
+  _actionDelay: 0.3
+  _distance: 1

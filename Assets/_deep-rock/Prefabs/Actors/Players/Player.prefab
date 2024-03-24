@@ -313,8 +313,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   IsDraw: 1
-  DrawColor: {r: 0, g: 1, b: 0.07144809, a: 1}
-  _radius: 7
+  DrawColor: {r: 1, g: 0, b: 0.08880377, a: 1}
+  _radius: 8
   Center: {fileID: 132453715320746105}
   _muzzle: {fileID: 7307258334379622648}
   _blockableMask:

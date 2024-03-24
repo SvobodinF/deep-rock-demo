@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c32ccc543650742729746c66d3983544, type: 3}
   m_Name: ShootingWeaponConfiguration
   m_EditorClassIdentifier: 
-  _bulletPrefab: {fileID: 6371278094162703560, guid: 342165b603cbf4940a3614995099a32a, type: 3}
-  _damage: 10
+  _damage: 30
   _actionDelay: 0.5
+  _bulletPrefab: {fileID: 6371278094162703560, guid: 342165b603cbf4940a3614995099a32a, type: 3}

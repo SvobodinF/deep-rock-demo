@@ -1,53 +1,58 @@
 using System.Collections;
+using Pathfinding;
 using UnityEngine;
 
-public abstract class Enemy : Actor<EnemyData>
+public abstract class Enemy : Actor<EnemyInitialData>
 {
-    [SerializeField] private Movement _movement;
+    [SerializeField] private AIPath _aIPath;
+    [SerializeField] private AIDestinationSetter _aIDestinationSetter;
 
-    protected override void OnInit(EnemyData data)
+    private Vector3 _direction => _aIPath.desiredVelocity;
+    private float _velocity => Mathf.Max(Mathf.Abs(_aIPath.desiredVelocity.x), Mathf.Abs(_aIPath.desiredVelocity.y));
+
+    protected override void OnInit(EnemyInitialData data)
     {
         EnemyConfiguration configuration = data.EnemyConfiguration;
 
         OnValidate();
 
-        _movement.Init(data.Controller, this, configuration.MovementConfiguration);
-        AnimationHandler.Init();
-
-        //_shootingWeapon.Init(data.BulletPool, weaponConfiguration.Damage, weaponConfiguration.ActionDelay);
-        //_digWeapon.Init(data.Controller, configuration.MeleeWeaponConfiguration);
+        _aIPath.maxSpeed = configuration.MovementConfiguration.MaxSpeed;
+        _aIDestinationSetter.target = data.Target.transform;
     }
 
     private void OnEnable()
     {
         OnDiedEvent += () => StartCoroutine(OnDied());
+        OnHeathPercentChangedEvent += OnDamaged;
     }
 
     private void OnDisable()
     {
         OnDiedEvent -= () => StartCoroutine(OnDied());
+        OnHeathPercentChangedEvent -= OnDamaged;
     }
 
     private void OnValidate()
     {
-        _movement = GetComponent<Movement>();
+        _aIPath = GetComponent<AIPath>();
+        _aIDestinationSetter = GetComponent<AIDestinationSetter>();
     }
 
     protected override void Rotate()
     {
-        if (_movement.Direction.x == 0 && _movement.Direction.y == 0)
+        if (_direction.x == 0 && _direction.y == 0)
         {
             return;
         }
         else
         {
-            transform.eulerAngles = _movement.GetRotationByVelocity();
+            transform.eulerAngles = GetRotationByVelocity();
         }
     }
 
-    protected override void OnAnimate()
+    private void OnDamaged(float damage)
     {
-        AnimationHandler.Set<SpeedAnimationParameter, float>(_movement.Velocity);
+        AnimationHandler.Set<HitAnimationParameter, int>(0);
     }
 
     private IEnumerator OnDied()
@@ -58,19 +63,25 @@ public abstract class Enemy : Actor<EnemyData>
 
         gameObject.SetActive(false);
     }
+
+    private Vector3 GetRotationByVelocity()
+    {
+        if (_velocity == 0)
+            return new Vector3(0f, transform.eulerAngles.y, 0f);
+
+        float rotation = _direction.x > 0 ? 0f : 180f;
+        return new Vector3(0f, rotation, 0f);
+    }
 }
 
-
-public struct EnemyData
+public struct EnemyInitialData
 {
     public readonly EnemyConfiguration EnemyConfiguration;
-    public readonly IController Controller;
-    public readonly ObjectPool<Bullet> BulletPool;
+    public readonly ITransformable Target;
 
-    public EnemyData(EnemyConfiguration enemyConfiguration, IController controller, ObjectPool<Bullet> bulletPool)
+    public EnemyInitialData(EnemyConfiguration enemyConfiguration, ITransformable target)
     {
         EnemyConfiguration = enemyConfiguration;
-        Controller = controller;
-        BulletPool = bulletPool;
+        Target = target;
     }
 }

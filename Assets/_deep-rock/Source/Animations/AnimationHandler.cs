@@ -8,7 +8,7 @@ public abstract class AnimationHandler : MonoBehaviour
 
     [SerializeField] private Animator _animator;
 
-    protected Dictionary<Type, IAnimationParameter> Animation;
+    protected Dictionary<Type, IAnimationParameter> Animations;
 
     public void Init()
     {
@@ -40,7 +40,7 @@ public abstract class AnimationHandler : MonoBehaviour
 
     private IAnimationParameter GetAnimationByType(Type type)
     {
-        if (Animation.TryGetValue(type, out IAnimationParameter state))
+        if (Animations.TryGetValue(type, out IAnimationParameter state))
         {
             return state;
         }

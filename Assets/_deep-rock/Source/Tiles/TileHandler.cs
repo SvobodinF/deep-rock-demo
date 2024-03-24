@@ -1,14 +1,19 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class TileHandler : MonoBehaviour, IDiggable
 {
+    public event Action OnTileRemovedEvent;
+
     [SerializeField] private Tilemap _tilemap;
     [SerializeField] private TileConnector _tileConnector;
     [SerializeField] private int _maxHealth;
 
     private Dictionary<Vector3Int, int> _cellsHealth;
+
+    private Vector3Int _cellDebug;
 
     public void Start()
     {
@@ -30,21 +35,28 @@ public class TileHandler : MonoBehaviour, IDiggable
         }
     }
 
-    public void Dig(Vector3Int position, int damage)
+    public void Dig(Vector3 position, int damage)
     {
-        if (_cellsHealth.TryGetValue(position, out int currentHealth))
+        Vector3Int cellIndexes = _tilemap.WorldToCell(position);
+        _cellDebug = cellIndexes;
+
+        if (_cellsHealth.TryGetValue(cellIndexes, out int currentHealth))
         {
             if (currentHealth <= 0)
             {
-                _tilemap.SetTile(position, null);
-                _tileConnector.CalculateNeighboursConnection(new Vector2Int(position.x, position.y));
-            }
-            else
-            {
-                _cellsHealth[position] -= damage;
+                _tilemap.SetTile(cellIndexes, null);
+                _tileConnector.CalculateNeighboursConnection(new Vector2Int(cellIndexes.x, cellIndexes.y));
+                OnTileRemovedEvent?.Invoke();
+
+                return;
             }
 
-            Debug.Log($"{position}, {currentHealth}");
+            _cellsHealth[cellIndexes] -= damage;
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(_cellDebug, 0.2f);
     }
 }

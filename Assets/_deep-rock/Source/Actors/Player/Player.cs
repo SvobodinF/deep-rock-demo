@@ -17,8 +17,6 @@ public class Player : Actor<PlayerData>, ICameraTarget
         OnValidate();
 
         _movement.Init(data.Controller, this, configuration.MovementConfiguration);
-        AnimationHandler.Init();
-
         _shootingWeapon.Init(data.BulletPool, weaponConfiguration.Damage, weaponConfiguration.ActionDelay);
         _digWeapon.Init(data.Controller, configuration.MeleeWeaponConfiguration);
     }

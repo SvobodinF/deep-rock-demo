@@ -16,6 +16,9 @@ public class HealthBar : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (_aliveble == null)
+            return;
+
         _aliveble.OnHeathPercentChangedEvent -= ChangeFill;
     }
 
