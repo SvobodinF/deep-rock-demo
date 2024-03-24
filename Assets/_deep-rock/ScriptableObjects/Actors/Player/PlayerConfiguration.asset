@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82db0ded74b148a99c0092a946b7f84, type: 3}
+  m_Name: PlayerConfiguration
+  m_EditorClassIdentifier: 
+  _controller: {fileID: 7489779617991872042, guid: 3c9a229939cb4406e83aa6df8b63b3e1, type: 3}
+  _shootingWeaponConfiguration: {fileID: 11400000, guid: 56c088bb0410442acab966f38931a4a3, type: 2}
+  _meleeWeaponConfiguration: {fileID: 11400000, guid: 1a9dabb1628ed40faa27b272de0f9a29, type: 2}
+  _healthConfiguration:
+    _maxHealth: 100
+  _movementConfiguration:
+    _maxSpeed: 200
